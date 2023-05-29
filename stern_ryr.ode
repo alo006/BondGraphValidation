@@ -1,0 +1,36 @@
+# Stern RyR (from Grandi atrial model)
+
+init r=0.048724, o=0.00084671, i=0.016234
+# init r=0.128724, o=0.54671, i=0.16234
+
+
+# equations
+
+dr/dt=(kim*ri-kisrca*caj*r)-(kosrca*(caj^2)*r-kom*o)
+do/dt=(kosrca*(caj^2)*r-kom*o)-(kisrca*caj*o-kim*i)
+di/dt=(kisrca*caj*o-kim*i)-(kom*i-kosrca*(caj^2)*ri)
+
+# RyR equations
+
+kcasr=maxsr-((maxsr-minsr)/(1+(ecsr/casr)^2.5))
+kosrca=koca/kcasr
+kisrca=kica*kcasr
+
+# RyR probability conservation equations
+
+ri=1-r-o-i
+
+# RyR parameters
+
+param maxsr=15, minsr=1, ecsr=0.45, 
+param koca=10, kom=0.06, kica=0.5, kim=0.005
+
+
+# Ionic concentrations
+
+param caj=0.02714, casr=0.5011
+
+@ total=1000, dt=0.05, xp=r, yp=o, xlo=0, xhi=1, ylo=0, yhi=1, meth=stiff, bounds=1000
+# @ total=1000, dt=0.05, xp=t, yp=o, xlo=0, xhi=1000, ylo=0, yhi=1, meth=stiff, bounds=1000
+# @ parmin=0, parmax=10, autoxmin=0, autoxmax=10, autoymin=0, autoymax=1, ds=0.001, dsmax=0.05, dsmin=0.0001, Ntst=2000, Nmax=3000, Npr=15
+@ parmin=0, parmax=100, autoxmin=0, autoxmax=100, autoymin=0, autoymax=100, ds=0.001, dsmax=0.05, dsmin=0.0001, Ntst=2000, Nmax=3000, Npr=15
